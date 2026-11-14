@@ -612,7 +612,8 @@ blockquote {
   position: relative;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 30px;
+  --process-gap: 30px;
+  gap: var(--process-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -622,8 +623,8 @@ blockquote {
   content: "";
   position: absolute;
   top: 23px;
-  left: 8%;
-  right: 8%;
+  left: 24px;
+  right: calc((100% - 4 * var(--process-gap)) / 5 - 24px);
   height: 2px;
   z-index: 0;
   background: #e5e8d6;
@@ -1201,7 +1202,7 @@ blockquote {
   }
 
   .process-list {
-    gap: 18px;
+     --process-gap: 18px;
   }
 
   .process-step h3,
