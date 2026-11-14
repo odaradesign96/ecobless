@@ -48,6 +48,38 @@
     });
   }
 
+  // Submenú de Servicios
+  document.querySelectorAll("[data-dropdown]").forEach((dropdown) => {
+    const toggle = dropdown.querySelector(".nav-dropdown-toggle");
+    if (!toggle) return;
+
+    const setOpen = (open) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      dropdown.classList.toggle("is-open", open);
+    };
+
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    dropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => setOpen(false));
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!dropdown.contains(event.target)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setOpen(false);
+    });
+
+    dropdown.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !dropdown.contains(event.relatedTarget)) setOpen(false);
+    });
+  });
+
   const revealElements = document.querySelectorAll(".reveal");
 
   if ("IntersectionObserver" in window) {
