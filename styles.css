@@ -598,6 +598,103 @@ blockquote {
   background: var(--lime);
 }
 
+/* Submenú de Servicios */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nav-dropdown-toggle svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .2s ease;
+}
+
+.nav-dropdown.is-open .nav-dropdown-toggle svg {
+  transform: rotate(180deg);
+}
+
+.nav-submenu {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 340px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -8px);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+
+/* Puente invisible para que el hover no se corte entre el botón y el submenú */
+.nav-submenu::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 0;
+  right: 0;
+  height: 18px;
+}
+
+.nav-dropdown.is-open .nav-submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+@media (hover: hover) and (min-width: 1051px) {
+  .nav-dropdown:hover .nav-submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  .nav-dropdown:hover .nav-dropdown-toggle svg {
+    transform: rotate(180deg);
+  }
+}
+
+.main-nav .nav-submenu a {
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: var(--green-deep);
+  white-space: normal;
+  transition: background .2s ease;
+}
+
+.main-nav .nav-submenu a::after {
+  display: none;
+}
+
+.main-nav .nav-submenu a:hover,
+.main-nav .nav-submenu a:focus-visible {
+  background: var(--lime-soft);
+}
+
 /* Process */
 
 .process-section {
@@ -611,8 +708,9 @@ blockquote {
 .process-list {
   position: relative;
   display: grid;
+  --process-gap: 30px;
   grid-template-columns: repeat(5, 1fr);
-  gap: 30px;
+  gap: var(--process-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -622,8 +720,9 @@ blockquote {
   content: "";
   position: absolute;
   top: 23px;
-  left: 8%;
-  right: 8%;
+  /* Va del centro del primer círculo al centro del último */
+  left: 24px;
+  right: calc((100% - 4 * var(--process-gap)) / 5 - 24px);
   height: 2px;
   z-index: 0;
   background: #e5e8d6;
@@ -1180,6 +1279,49 @@ blockquote {
     border-bottom: 0;
   }
 
+  .nav-dropdown {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 15px 10px;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .nav-submenu,
+  .nav-dropdown.is-open .nav-submenu {
+    position: static;
+    min-width: 0;
+    padding: 0 0 10px 12px;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    transition: none;
+  }
+
+  .nav-submenu {
+    display: none;
+  }
+
+  .nav-dropdown.is-open .nav-submenu {
+    display: flex;
+  }
+
+  .nav-submenu::before {
+    display: none;
+  }
+
+  .main-nav .nav-submenu a,
+  .main-nav .nav-submenu a:last-child {
+    padding: 11px 10px;
+    border-bottom: 0;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
   .hero-grid {
     gap: 28px;
   }
@@ -1201,7 +1343,7 @@ blockquote {
   }
 
   .process-list {
-    gap: 18px;
+    --process-gap: 18px;
   }
 
   .process-step h3,
@@ -1357,8 +1499,8 @@ blockquote {
   }
 
   .process-list::before {
-    top: 12px;
-    bottom: 12px;
+    top: 24px;
+    bottom: 64px;
     left: 23px;
     right: auto;
     width: 2px;
@@ -1491,4 +1633,79 @@ blockquote {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Botón flotante de WhatsApp */
+.wa-float {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.wa-icon {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #25d366;
+  box-shadow: 0 10px 26px rgba(37, 211, 102, .35), 0 4px 12px rgba(0, 0, 0, .12);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.wa-icon svg {
+  width: 32px;
+  height: 32px;
+  fill: var(--white);
+}
+
+.wa-bubble {
+  position: relative;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--green-deep);
+  font-weight: 700;
+  font-size: .95rem;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+  animation: wa-bubble-in .5s ease 1s both;
+}
+
+.wa-float:hover .wa-icon,
+.wa-float:focus-visible .wa-icon {
+  transform: scale(1.08);
+  box-shadow: 0 14px 32px rgba(37, 211, 102, .45), 0 4px 12px rgba(0, 0, 0, .14);
+}
+
+.wa-float:focus-visible {
+  outline: none;
+}
+
+.wa-float:focus-visible .wa-icon {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+
+@keyframes wa-bubble-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 430px) {
+  .wa-float { right: 14px; bottom: 14px; gap: 8px; }
+  .wa-icon { width: 56px; height: 56px; }
+  .wa-icon svg { width: 28px; height: 28px; }
+  .wa-bubble { padding: 9px 13px; font-size: .88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-bubble { animation: none; }
+  .wa-icon { transition: none; }
 }
